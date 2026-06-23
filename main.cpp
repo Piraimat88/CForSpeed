@@ -10,7 +10,7 @@ int main() {
     const int W = 800;
     const int H = 600;
 
-    InitWindow(W, H, "2D Racing Game");
+    InitWindow(W, H, "C For Cpeed");
     SetTargetFPS(60);
 
     GameState state = MENU;
