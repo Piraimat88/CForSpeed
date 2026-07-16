@@ -58,7 +58,8 @@ int main() {
             if (enemy.y > H) {
                 enemy.y = -100;
                 enemy.x = (float)(220 + GetRandomValue(0, 300));
-                score++;
+                score+=(int)enemySpeed;
+                enemySpeed*=1.05;
             }
 
             if (CheckCollisionRecs(player, enemy)) {
@@ -68,6 +69,7 @@ int main() {
             break;
 
         case GAMEOVER:
+            enemySpeed = 5.0f;
 
             if (IsKeyPressed(KEY_R)) {
                 player.x = 375;
