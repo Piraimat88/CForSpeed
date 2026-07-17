@@ -17,12 +17,14 @@ int main() {
 
     Rectangle player = { 375, 500, 50, 80 };
     Rectangle enemy = { 375, -100, 50, 80 };
+    Rectangle enemy2 = { 225, -250, 50, 80};
+    Rectangle enemy3 = { 525, -400, 50, 80};
 
     float playerSpeed = 6.0f;
     float enemySpeed = 5.0f;
 
     int score = 0;
-
+    int lanemarkertracker=-80;
     while (!WindowShouldClose()) {
 
         switch (state) {
@@ -32,6 +34,8 @@ int main() {
             if (IsKeyPressed(KEY_ENTER)) {
                 player.x = 375;
                 enemy.y = -100;
+                enemy2.y = -250;
+                enemy3.y = -400;
                 score = 0;
                 state = GAME;
             }
@@ -54,15 +58,34 @@ int main() {
                 player.x = 550;
 
             enemy.y += enemySpeed;
+            enemy2.y +=enemySpeed;
+            enemy3.y +=enemySpeed;
 
             if (enemy.y > H) {
                 enemy.y = -100;
                 enemy.x = (float)(220 + GetRandomValue(0, 300));
                 score+=(int)enemySpeed;
-                enemySpeed*=1.05;
+                enemySpeed*=1.015;
+                playerSpeed*=1.01;
             }
+            if (enemy2.y > H){
+                enemy2.y = -250;
+                enemy2.x = (float)(220 + GetRandomValue(0, 300));
+                score+=(int)enemySpeed;
+                enemySpeed*=1.015;
+                playerSpeed*=1.01;
+            }
+            if (enemy3.y > H){
+                enemy3.y = -250;
+                enemy3.x = (float)(220 + GetRandomValue(0, 300));
+                score+=(int)enemySpeed;
+                enemySpeed*=1.015;
+                playerSpeed*=1.01;
+            }
+            
+            
 
-            if (CheckCollisionRecs(player, enemy)) {
+            if (CheckCollisionRecs(player, enemy) || CheckCollisionRecs(player, enemy2) || CheckCollisionRecs(player,enemy3)) {
                 state = GAMEOVER;
             }
 
@@ -75,6 +98,10 @@ int main() {
                 player.x = 375;
                 enemy.x = 375;
                 enemy.y = -100;
+                enemy2.x = 225;
+                enemy2.y = -250;
+                enemy3.x = 525;
+                enemy3.y = -400;
                 score = 0;
                 state = GAME;
             }
@@ -101,8 +128,14 @@ int main() {
             DrawRectangle(200, 0, 400, H, GRAY);
 
             // Lane markers
-            for (int y = 0; y < H; y += 80) {
+            for (int y = lanemarkertracker; y < H; y += 80) {
                 DrawRectangle(395, y, 10, 40, WHITE);
+            }
+            if(lanemarkertracker<=0) lanemarkertracker+=enemySpeed;
+            else{
+                lanemarkertracker-=80;
+                lanemarkertracker+=enemySpeed;
+
             }
 
             // Player car
@@ -110,6 +143,10 @@ int main() {
 
             // Enemy car
             DrawRectangleRec(enemy, RED);
+
+            DrawRectangleRec(enemy2, RED);
+
+            DrawRectangleRec(enemy3, RED);
 
             DrawText(TextFormat("Score: %i", score), 20, 20, 30, WHITE);
 
